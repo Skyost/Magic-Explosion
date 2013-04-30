@@ -1,0 +1,9 @@
+name: Magic Explosion
+version: 0.1
+main: com.skyost.me.Main
+author: Skyost
+website: http://www.imcbans.cu.cc/
+permisions:
+ magicexplosion.player.usefeather:
+  default: op
+  description: Allows you to use the feather for creating explosions
