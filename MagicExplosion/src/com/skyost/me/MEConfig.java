@@ -11,4 +11,5 @@ public class MEConfig extends Config {
 	}
 	public boolean CreateFire = false;
 	public boolean LogExplosions = true;
+	public boolean AutoUpdateOnLoad = true;
 }
