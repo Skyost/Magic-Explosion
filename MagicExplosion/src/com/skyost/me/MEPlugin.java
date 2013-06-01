@@ -12,9 +12,11 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import com.skyost.me.Metrics.Graph;
 
 public class MEPlugin extends JavaPlugin implements Listener
 {
+	public int totalExplosions;
 	public MEConfig config;
 	public MEConfigLanguage configLanguage;
 	public static boolean createFire;
@@ -37,7 +39,7 @@ public class MEPlugin extends JavaPlugin implements Listener
 		this.getServer().getPluginManager().registerEvents(this, this);
 		loadConfig();
 		update();
-		startMetricsLite();
+		startMetrics();
 		System.out.println("[Magic Explosion] " + enableMessage);
     }
 	
@@ -114,6 +116,7 @@ public class MEPlugin extends JavaPlugin implements Listener
             			try {
             				if(IE.equals(IEe)) {
             					Player.getWorld().createExplosion(Player.getTargetBlock(null, 0).getLocation(), 4F, createFire);
+            					totalExplosions = totalExplosions + 1;
             						if(logExplosions == true) {
             							System.out.println("[Magic Explosion] " + explosionMessage + " " + Player.getName() + " !");
             						}
@@ -151,9 +154,16 @@ public class MEPlugin extends JavaPlugin implements Listener
     	UpdateAvailable = configLanguage.Update_UPDATE_AVAILABLE;
     }
     
-	public void startMetricsLite() {
+	public void startMetrics() {
 		try {
-		    MetricsLite metrics = new MetricsLite(this);
+		    Metrics metrics = new Metrics(this);
+		    Graph explosionGraph = metrics.createGraph("Default");
+		    explosionGraph.addPlotter(new Metrics.Plotter("Total explosions") {
+		    @Override
+		    public int getValue() {
+		        return totalExplosions;	
+		       }
+		    });
 		    metrics.start();
 		} catch (IOException e3) {
 			System.out.println("[Magic Explosion] " + e3);
