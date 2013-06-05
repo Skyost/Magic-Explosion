@@ -12,6 +12,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import com.skyost.me.Metrics.Graph;
 
 public class MEPlugin extends JavaPlugin implements Listener
@@ -157,13 +158,34 @@ public class MEPlugin extends JavaPlugin implements Listener
 	public void startMetrics() {
 		try {
 		    Metrics metrics = new Metrics(this);
-		    Graph explosionGraph = metrics.createGraph("Default");
+		    Graph explosionGraph = metrics.createGraph("Explosions");
 		    explosionGraph.addPlotter(new Metrics.Plotter("Total explosions") {
 		    @Override
 		    public int getValue() {
 		        return totalExplosions;	
 		       }
 		    });
+		    
+    		Graph updateGraph = metrics.createGraph("Update Graph");
+    		updateGraph.addPlotter(new Metrics.Plotter("Checking for Updates") {	
+    			@Override
+    			public int getValue() {	
+    				return 1;
+    			}
+    			
+    			@Override
+    			public String getColumnName() {
+    				if(autoUpdate == true) {
+    					return "Yes";
+    				}
+    				else if (autoUpdate == false) {
+    					return "No";
+    				}
+    				else {
+    					return "Maybe";
+    				}
+    			}
+    		});
 		    metrics.start();
 		} catch (IOException e3) {
 			System.out.println("[Magic Explosion] " + e3);
